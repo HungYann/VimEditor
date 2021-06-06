@@ -1,0 +1,305 @@
+"""""""""""""""""""""""""""""""""""""""""
+" Author   : liubaohai
+" ReadMe   : README.md
+" Version  : 1.0 - Jun. 01,2019
+" Contents : -> 基础配置设置
+"            -> 自定义快捷键
+"            -> 主题颜色显示
+"            -> 其它杂项配置
+"            -> 插件管理配置
+"            -> 自定义的函数
+"""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""""""""
+" 基础配置设置
+"""""""""""""""""""""""""""""""""""""""""
+filetype on                      "检测文件类型
+filetype indent on               "针对不同的文件类型采用不同的缩进格式
+filetype plugin on               "允许插件
+filetype plugin indent on        "启动自动补全
+
+set nobackup                     "不自动保存
+set number                       "行号
+set history=2000                 "history存储长度
+set nocompatible                 "非兼容vi模式,避免以前版本的一些bug和局限
+set shortmess=atI                "启动的时候不显示那个援助索马里儿童的提示
+set title                        "change the terminal's title
+set novisualbell                 "don't beep
+set noerrorbells                 "don't beep
+set showmatch                    "括号配对情况
+set hidden                       "A buffer becomes hidden when it is abandoned
+set wildmode=list:longest
+set ttyfast
+set wildignore=*.swp,*.,*.pyc,*.class
+set selection=old
+set selectmode=mouse,key
+set viminfo^=%                   "Remember info about open buffers on close
+set magic                        "正则表达式匹配形式
+set backspace=eol,start,indent   "Configure backspace so it acts as it should act
+set completeopt-=preview
+set scrolloff=7
+
+" 搜索
+"""""""""""""""""""""""""""""""""""""""""
+set hlsearch                     "高亮search命中的文本。
+set ignorecase                   "搜索时忽略大小写
+set incsearch                    "随着键入即时搜索
+set smartcase                    "有一个或以上大写字母时仍大小写敏感
+
+" 折叠
+"""""""""""""""""""""""""""""""""""""""""
+set foldenable
+set foldmethod=indent
+set foldlevel=99
+
+" 缩进
+"""""""""""""""""""""""""""""""""""""""""
+set smartindent                  "智能缩进
+set autoindent                   "总是自动缩进
+set tabstop=4                    "设置Tab键的宽度(等同的空格个数)
+set shiftwidth=4                 "自动对齐的空格数
+set softtabstop=4                "按退格键时可以一次删掉4个空格
+set smarttab                     "insert tabs on the start of a line according to shiftwidth, not tabstop
+set expandtab                    "将Tab自动转化成空格(需要输入真正的Tab键时,使用Ctrl+V+Tab)
+set shiftround                   "Use multiple of shiftwidth when indenting with '<' and '>'
+set list listchars=tab:>-,trail:-
+set cc=120
+
+" 编码
+"""""""""""""""""""""""""""""""""""""""""
+set encoding=utf-8
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,chinese,big5,euc-jp,euc-kr,latin1
+set fileencoding=utf-8
+set helplang=cn
+set termencoding=utf-8           "这句只影响普通模式 (非图形界面) 下的Vim
+set ffs=unix,dos,mac             "Use Unix as the standard file type
+set formatoptions+=m             "如遇Unicode值大于255的文本，不必等到空格再折行。
+set formatoptions+=B             "合并两行中文时，不在中间加空格：
+
+" 语法
+"""""""""""""""""""""""""""""""""""""""""
+syntax enable                    "打开语法高亮
+syntax on
+
+" 状态栏
+"""""""""""""""""""""""""""""""""""""""""
+set ruler                        "显示当前的行号列号
+set showcmd                      "在状态栏显示正在输入的命令
+set showmode
+set laststatus=2                 "命令行（在状态行下）的高度，默认为1，这里是2
+
+"""""""""""""""""""""""""""""""""""""""""
+" 自定义快捷键
+"""""""""""""""""""""""""""""""""""""""""
+" 前导符号
+"""""""""""""""""""""""""""""""""""""""""
+let mapleader = '\'
+let g:mapleader = '\'
+let g:netrw_silent = 1
+
+set nocursorline
+set nocursorcolumn
+
+" 常用快捷键
+"""""""""""""""""""""""""""""""""""""""""
+" 到光标所在行第一个非空字符
+noremap ( ^
+noremap ) $
+" 从光标处复制到行尾，不包括行尾结束符
+noremap Y y$
+" 选中状态下 Ctrl+c 复制
+vnoremap cc "+y
+" 按;直接进入命令行模式
+nnoremap ; :
+inoremap <C-f> <esc>
+
+" 多窗口标签快捷键
+"""""""""""""""""""""""""""""""""""""""""
+" 在多个窗口间切换
+noremap <C-j> <C-W>j
+noremap <C-k> <C-W>k
+noremap <C-h> <C-W>h
+noremap <C-l> <C-W>l
+
+"""""""""""""""""""""""""""""""""""""""""
+" 主题颜色显示
+"""""""""""""""""""""""""""""""""""""""""
+
+" 修改主题和颜色展示
+set t_Co=256
+set t_ut=
+set background=dark
+colorscheme spacegray
+
+" 设置标记一列的背景颜色和数字一行颜色一致
+hi! link SignColumn   LineNr
+hi! link ShowMarksHLl DiffAdd
+hi! link ShowMarksHLu DiffChange
+
+"""""""""""""""""""""""""""""""""""""""""
+" 插件管理配置开始
+"""""""""""""""""""""""""""""""""""""""""
+call plug#begin('~/.vim/bundle')
+
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+let g:Lf_StlColorscheme = 'one'
+let g:Lf_PreviewResult = { 'BufTag': 0, 'Function': 0 }
+let g:Lf_DefaultMode = 'NameOnly'
+let g:Lf_AlmostAlign = 0
+let g:Lf_ShowDevIcons = 0
+nnoremap ,t :LeaderfBufTag<CR>
+nnoremap ,n :LeaderfBufTag!<CR>
+nnoremap ,f :LeaderfFile<CR>
+" search word under cursor, the pattern is treated as regex, and enter normal mode directly
+noremap <C-F> :<C-U><C-R>=printf("Leaderf rg -w %s ", expand("<cword>"))<CR>
+" search word under cursor, the pattern is treated as regex,
+" append the result to previous search results.
+noremap <C-G> :<C-U><C-R>=printf("Leaderf rg --append -e %s ", expand("<cword>"))<CR>
+" search word under cursor literally only in current buffer
+noremap <C-B> :<C-U><C-R>=printf("Leaderf rg -F --current-buffer -e %s ", expand("<cword>"))<CR>
+" search visually selected text literally, don't quit LeaderF after accepting an entry
+xnoremap gf :<C-U><C-R>=printf("Leaderf rg -F --stayOpen -e %s ", leaderf#Rg#visual())<CR>
+
+" 插件：状态栏美观
+"""""""""""""""""""""""""""""""""""""""""
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+let g:airline_powerline_fonts = 1
+let g:airline_theme='atomic'
+let airline#extensions#tmuxline#snapshot_file = "~/.tmux-status.conf"
+let g:airline_extensions = ['branch', 'tabline', 'tmuxline', 'coc']
+
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tabline#show_tab_nr = 1
+let g:airline#extensions#tabline#show_tab_type = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#tab_nr_type = 2
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+nmap ,1 <Plug>AirlineSelectTab1
+nmap ,2 <Plug>AirlineSelectTab2
+nmap ,3 <Plug>AirlineSelectTab3
+nmap ,4 <Plug>AirlineSelectTab4
+nmap ,5 <Plug>AirlineSelectTab5
+nmap ,6 <Plug>AirlineSelectTab6
+nmap ,7 <Plug>AirlineSelectTab7
+nmap ,8 <Plug>AirlineSelectTab8
+nmap ,9 <Plug>AirlineSelectTab9
+nmap <TAB> :bnext<CR>
+nmap <S-TAB> :bprev<CR>
+
+Plug 'edkolev/tmuxline.vim'
+
+" 插件：快速加/减注释(选中后,按,cc加上注释,按,cu解开注释)
+"""""""""""""""""""""""""""""""""""""""""
+Plug 'scrooloose/nerdcommenter'
+
+" 插件：代码格式化
+"""""""""""""""""""""""""""""""""""""""""
+Plug 'godlygeek/tabular'
+nnoremap ,a= :Tabularize /=<CR>
+vnoremap ,a= :Tabularize /=<CR>
+nnoremap ,a: :Tabularize /:\zs<CR>
+vnoremap ,a: :Tabularize /:\zs<CR>
+
+Plug 'tpope/vim-fugitive'
+
+Plug 'terryma/vim-multiple-cursors'
+
+Plug 'vim-scripts/a.vim'
+
+Plug 'sbdchd/neoformat'
+let g:neoformat_only_msg_on_error = 1
+let g:neoformat_enabled_go = ["gofmt"]
+let g:neoformat_enabled_python = []
+let g:neoformat_enabled_lua = []
+let g:neoformat_enabled_c = []
+let g:neoformat_enabled_cpp = []
+let g:neoformat_enabled_java = []
+let g:neoformat_enabled_rust = ["rustfmt"]
+let g:neoformat_enabled_scala = []
+let g:neoformat_enabled_sbt = []
+autocmd BufWrite * :Neoformat
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Some servers have issues with backup files, see #649
+set nowritebackup
+
+" Better display for messages
+set cmdheight=2
+
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Remap keys for gotos
+nmap ,gg <Plug>(coc-definition)
+nmap ,gd <Plug>(coc-declaration)
+nmap ,gi <Plug>(coc-implementation)
+nmap ,gt <Plug>(coc-type-definition)
+nmap ,gr <Plug>(coc-references)
+nmap ,rn <Plug>(coc-rename)
+
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+nnoremap <silent> <space>m  :<C-u>CocList commits<CR>
+nnoremap <silent> <space>bm :<C-u>CocList bcommits<CR>
+
+nmap <silent> <C-c> <Plug>(coc-cursors-position)
+nmap <silent> <C-m> <Plug>(coc-cursors-word)
+xmap <silent> <C-m> <Plug>(coc-cursors-range)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    else
+        call CocAction('doHover')
+    endif
+endfunction
+
+highlight CocErrorHighlight ctermfg=Red  guifg=#ff0000
+highlight CocWarningHighlight ctermfg=Red  guifg=#ff0000
+
+call plug#end()
+"""""""""""""""""""""""""""""""""""""""""
+" 插件管理配置结束
+"""""""""""""""""""""""""""""""""""""""""
