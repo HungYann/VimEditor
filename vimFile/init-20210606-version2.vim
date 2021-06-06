@@ -5,9 +5,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'machakann/vim-highlightedyank'
 Plug 'jiangmiao/auto-pairs'
 Plug 'derekwyatt/vim-scala'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end() 
-
 
 
 let g:highlightedyank_highlight_duration = 1000 " 高亮持续时间为 1000 毫秒
